@@ -1,5 +1,5 @@
 // ============================================================
-//  ВОЛШЕБНЫЕ БУТЫЛКИ — полная версия (адаптивность A)
+//  MAGIC BOTTLES v2 — полный game.js
 // ============================================================
 
 // ---------- 1. УРОВНИ (10 штук) ----------
@@ -145,7 +145,7 @@ document.getElementById('breakContinueBtn').addEventListener('click', resumeGame
 document.getElementById('breakExitBtn').addEventListener('click', exitGame);
 document.getElementById('restartAllBtn').addEventListener('click', () => location.reload());
 
-// ---------- 9. ЗАГРУЗКА ----------
+// ---------- 9. ЗАГРУЗКА УРОВНЯ ----------
 function loadLevel(index) {
   bottles = levels[index].map(bottle => [...bottle]);
   selectedBottle = null;
@@ -188,7 +188,7 @@ function checkWin() {
   );
 }
 
-// ---------- 11. АНИМАЦИЯ ----------
+// ---------- 11. АНИМАЦИЯ ПЕРЕЛИВАНИЯ ----------
 function animatePour(timestamp) {
   if (!animation) return;
   const elapsed = timestamp - animation.startTime;
@@ -391,4 +391,130 @@ function paintLayer(x, layerY, width, h, color, roundBottom) {
   if (roundBottom) {
     ctx.roundRect(x + 2, layerY, width - 4, h, [0, 0, 18, 18]);
   } else {
-    ctx.rect(x + 2, layerY, width - 4
+    ctx.rect(x + 2, layerY, width - 4, h);
+  }
+  ctx.fillStyle = gradient;
+  ctx.fill();
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+  ctx.fillRect(x + 7, layerY + 2, 4, Math.max(0, h - 4));
+}
+
+function drawSelection(x, y, index) {
+  if (selectedBottle === index) {
+    ctx.beginPath();
+    ctx.roundRect(x - 3, y - 3, BOTTLE_WIDTH + 6, BOTTLE_HEIGHT + 6, [12, 12, 28, 28]);
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 3;
+    ctx.shadowColor = '#FFFFFF';
+    ctx.shadowBlur = 15;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+}
+
+function drawGlassHighlight(x, y) {
+  ctx.beginPath();
+  ctx.roundRect(x + 5, y + 10, 4, BOTTLE_HEIGHT - 40, 2);
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+  ctx.fill();
+}
+
+function drawStream(startX, startY, p) {
+  const fromX = startX + animation.from * (BOTTLE_WIDTH + BOTTLE_SPACING) + BOTTLE_WIDTH / 2;
+  const toX = startX + animation.to * (BOTTLE_WIDTH + BOTTLE_SPACING) + BOTTLE_WIDTH / 2;
+  const topY = startY - 20;
+  const midX = (fromX + toX) / 2;
+  const midY = topY - 40;
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(fromX, topY);
+  ctx.quadraticCurveTo(midX, midY, toX, topY);
+  ctx.strokeStyle = animation.color;
+  ctx.lineWidth = 6;
+  ctx.lineCap = 'round';
+  ctx.shadowColor = animation.color;
+  ctx.shadowBlur = 12;
+  const alpha = Math.sin(Math.PI * p);
+  ctx.globalAlpha = Math.max(0.15, alpha);
+  ctx.stroke();
+  ctx.restore();
+  if (p > 0.1 && p < 0.95) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(toX, topY, 5, 0, Math.PI * 2);
+    ctx.fillStyle = animation.color;
+    ctx.shadowColor = animation.color;
+    ctx.shadowBlur = 12;
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+// ---------- 15. ЦВЕТ ----------
+function shadeColor(color, percent) {
+  const num = parseInt(color.replace('#', ''), 16);
+  const amt = Math.round(2.55 * percent);
+  const R = Math.max(0, Math.min(255, (num >> 16) + amt));
+  const G = Math.max(0, Math.min(255, ((num >> 8) & 0x00FF) + amt));
+  const B = Math.max(0, Math.min(255, (num & 0x0000FF) + amt));
+  return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
+}
+
+// ---------- 16. КЛИКИ ----------
+canvas.addEventListener('pointerdown', (e) => {
+  if (animation || gamePaused) return;
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const clickX = (e.clientX - rect.left) * scaleX;
+  const clickY = (e.clientY - rect.top) * scaleY;
+  const totalBottles = bottles.length;
+  const totalWidth = totalBottles * (BOTTLE_WIDTH + BOTTLE_SPACING) - BOTTLE_SPACING;
+  const startX = (canvas.width - totalWidth) / 2;
+  const startY = canvas.height - BOTTLE_HEIGHT - 40;
+  for (let i = 0; i < totalBottles; i++) {
+    const bx = startX + i * (BOTTLE_WIDTH + BOTTLE_SPACING);
+    const by = startY;
+    if (
+      clickX >= bx && clickX <= bx + BOTTLE_WIDTH &&
+      clickY >= by && clickY <= by + BOTTLE_HEIGHT
+    ) {
+      if (selectedBottle === null) {
+        if (bottles[i].length > 0) {
+          selectedBottle = i;
+          render();
+        }
+      } else {
+        pour(selectedBottle, i);
+      }
+      break;
+    }
+  }
+});
+
+// ---------- 17. КНОПКА "ЗАНОВО" ----------
+document.getElementById('restartBtn').addEventListener('click', () => {
+  if (animation || gamePaused) return;
+  levelScore = Math.max(0, levelScore - 10);
+  const saved = levelScore;
+  bottles = levels[currentLevel].map(b => [...b]);
+  selectedBottle = null;
+  animation = null;
+  levelScore = saved;
+  updateHUD();
+  render();
+});
+
+// ---------- 18. ОКНО "ОБ ИГРЕ" ----------
+document.getElementById('aboutBtn').addEventListener('click', () => {
+  document.getElementById('aboutOverlay').classList.remove('hidden');
+});
+
+document.getElementById('aboutCloseBtn').addEventListener('click', () => {
+  document.getElementById('aboutOverlay').classList.add('hidden');
+});
+
+// ---------- 19. ЗАПУСК ----------
+updateHUD();
+loadLevel(0);
+startPlayTimer();
