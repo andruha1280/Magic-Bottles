@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Magic bottles</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg">
+    <span class="bubble b1"></span>
+    <span class="bubble b2"></span>
+    <span class="bubble b3"></span>
+    <span class="bubble b4"></span>
+    <span class="bubble b5"></span>
+  </div>
+
+  <div class="game-wrapper">
+    <!-- Название игры -->
+    <h1 class="game-title">Magic bottles</h1>
+
+    <header class="hud">
+      <div class="hud-item level-badge">Уровень <span id="levelNum">1</span> / <span id="levelTotal">10</span></div>
+      <div class="hud-item score-badge">⭐ Очки: <span id="scoreVal">0</span></div>
+      <div class="hud-item record-badge">🏆 Рекорд: <span id="recordVal">0</span></div>
+    </header>
+
+    <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+    <div class="controls">
+      <button id="restartBtn">🔄 Заново</button>
+      <button id="aboutBtn" class="btn-secondary">ℹ️ Об игре</button>
+    </div>
+  </div>
+
+  <!-- Подпись внизу -->
+  <footer class="footer-credit">
+    Сделано с помощью ИИ. (c) Моисеенко Андрей 2026 год
+  </footer>
+
+  <!-- Оверлей победы -->
+  <div id="winOverlay" class="overlay hidden">
+    <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+    <div class="win-card">
+      <h2>🎉 Уровень пройден! 🎉</h2>
+      <p>Очки за уровень: <strong id="levelScoreVal">0</strong></p>
+      <button id="nextBtn">➡️ Следующий уровень</button>
+    </div>
+  </div>
+
+  <!-- Оверлей "слишком долго" -->
+  <div id="breakOverlay" class="overlay hidden">
+    <div class="win-card break-card">
+      <h2>⏰ Ты играешь слишком долго!</h2>
+      <p>Сделай перерыв — отдохни 5 минут и возвращайся.</p>
+      <div class="break-buttons">
+        <button id="breakContinueBtn" class="btn-secondary">Продолжить</button>
+        <button id="breakExitBtn">Выход</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Оверлей "выход" -->
+  <div id="exitOverlay" class="overlay hidden">
+    <div class="win-card">
+      <h2>👋 До встречи!</h2>
+      <p>Твой рекорд: <strong id="finalRecordVal">0</strong></p>
+      <button id="restartAllBtn">🎮 Начать заново</button>
+    </div>
+  </div>
+
+  <!-- Оверлей "Об игре" -->
+  <div id="aboutOverlay" class="overlay hidden">
+    <div class="win-card about-card">
+      <h2>ℹ️ Об игре</h2>
+      <div class="about-text">
+        <p><strong>Magic bottles</strong> — логическая головоломка для детей и взрослых. Переливайте цветные жидкости между бутылками и собирайте каждый цвет в отдельной бутылке.</p>
+        <p><strong>Правила:</strong></p>
+        <ul>
+          <li>Нажмите на бутылку с жидкостью — она подсветится.</li>
+          <li>Затем нажмите на другую бутылку, чтобы перелить верхний слой.</li>
+          <li>Переливать можно только в пустую бутылку или туда, где сверху такой же цвет.</li>
+          <li>Цель: собрать в каждой бутылке по 4 слоя одного цвета.</li>
+        </ul>
+        <p><strong>Очки:</strong></p>
+        <ul>
+          <li>+5 за «идеальный» ход (перелив в бутылку с тем же цветом).</li>
+          <li>+100 за пройденный уровень.</li>
+          <li>−10 за использование кнопки «Заново».</li>
+        </ul>
+        <p><strong>Управление:</strong> мышь или палец. Кнопка «Заново» возвращает уровень в начало. Игра предупредит, если вы играете дольше 10 минут.</p>
+      </div>
+      <button id="aboutCloseBtn">Понятно</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
