@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Magic bottles</title>
+  <title>Magic bottles v2</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,8 +16,10 @@
   </div>
 
   <div class="game-wrapper">
-    <!-- Название игры -->
-    <h1 class="game-title">Magic bottles</h1>
+    <h1 class="game-title">
+      Magic bottles
+      <span class="version-badge">v2</span>
+    </h1>
 
     <header class="hud">
       <div class="hud-item level-badge">Уровень <span id="levelNum">1</span> / <span id="levelTotal">10</span></div>
@@ -33,9 +35,8 @@
     </div>
   </div>
 
-  <!-- Подпись внизу -->
   <footer class="footer-credit">
-    Сделано с помощью ИИ. (c) Моисеенко Андрей 2026 год
+    Magic bottles v2 · Сделано с помощью ИИ. (c) Моисеенко Андрей 2026 год
   </footer>
 
   <!-- Оверлей победы -->
@@ -72,9 +73,9 @@
   <!-- Оверлей "Об игре" -->
   <div id="aboutOverlay" class="overlay hidden">
     <div class="win-card about-card">
-      <h2>ℹ️ Об игре</h2>
+      <h2>ℹ️ Об игре <span class="about-version">v2</span></h2>
       <div class="about-text">
-        <p><strong>Magic bottles</strong> — логическая головоломка для детей и взрослых. Переливайте цветные жидкости между бутылками и собирайте каждый цвет в отдельной бутылке.</p>
+        <p><strong>Magic bottles v2</strong> — логическая головоломка для детей и взрослых. Переливайте цветные жидкости между бутылками и собирайте каждый цвет в отдельной бутылке.</p>
         <p><strong>Правила:</strong></p>
         <ul>
           <li>Нажмите на бутылку с жидкостью — она подсветится.</li>
@@ -89,6 +90,7 @@
           <li>−10 за использование кнопки «Заново».</li>
         </ul>
         <p><strong>Управление:</strong> мышь или палец. Кнопка «Заново» возвращает уровень в начало. Игра предупредит, если вы играете дольше 10 минут.</p>
+        <p class="about-footer">Версия 2 · адаптивная вёрстка для смартфонов</p>
       </div>
       <button id="aboutCloseBtn">Понятно</button>
     </div>

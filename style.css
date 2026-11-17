@@ -90,9 +90,9 @@ canvas {
   background: rgba(255, 255, 255, 0.04);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 60px rgba(255, 255, 255, 0.03);
   cursor: pointer;
-  max-width: 95vw;      /* ← новое: не шире экрана */
-  height: auto;         /* ← новое: сохраняем пропорции */
-  touch-action: none;   /* ← новое: палец не прокручивает страницу */
+  max-width: 95vw;
+  height: auto;
+  touch-action: none;
 }
 
 .controls {
@@ -141,7 +141,6 @@ button:active {
   pointer-events: none;
 }
 
-/* Canvas конфетти под карточкой */
 .confetti-canvas {
   position: absolute;
   inset: 0;
@@ -152,6 +151,7 @@ button:active {
   background: transparent;
   box-shadow: none;
   cursor: default;
+  max-width: none;
 }
 
 .win-card {
@@ -216,7 +216,7 @@ button:active {
   color: #1a1a2e !important;
 }
 
-/* ---------- Название игры ---------- */
+/* ---------- Название игры + бейдж версии ---------- */
 .game-title {
   font-size: 2.6rem;
   font-weight: 800;
@@ -231,12 +231,51 @@ button:active {
   animation: titleShift 8s ease infinite;
   text-shadow: 0 0 30px rgba(255, 230, 109, 0.2);
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 @keyframes titleShift {
   0%   { background-position: 0% 50%; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+/* Бейдж версии рядом с названием */
+.version-badge {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4ECDC4, #44a8a1);
+  color: #0f0c29;
+  -webkit-text-fill-color: #0f0c29;
+  box-shadow: 0 4px 14px rgba(78, 205, 196, 0.45);
+  transform: translateY(-4px);
+  vertical-align: middle;
+}
+
+/* Версия в окне "Об игре" */
+.about-version {
+  font-size: 0.9rem;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #4ECDC4, #44a8a1);
+  color: #0f0c29;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.about-footer {
+  margin-top: 16px;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-style: italic;
 }
 
 /* ---------- Подпись внизу ---------- */
@@ -298,7 +337,6 @@ button:active {
   margin: 0 auto;
 }
 
-/* Скроллбар в окне "Об игре" (для WebKit) */
 .about-card::-webkit-scrollbar {
   width: 8px;
 }
@@ -314,7 +352,7 @@ button:active {
 /* ---------- Адаптивность для смартфонов ---------- */
 @media (max-width: 700px) {
   body {
-    overflow-y: auto;         /* разрешаем вертикальную прокрутку, если не влезет */
+    overflow-y: auto;
     align-items: flex-start;
     padding-top: 8px;
   }
@@ -323,6 +361,12 @@ button:active {
     font-size: 1.5rem;
     margin-bottom: 8px;
     letter-spacing: 1px;
+    gap: 8px;
+  }
+
+  .version-badge {
+    font-size: 0.7rem;
+    padding: 3px 7px;
   }
 
   .hud {
