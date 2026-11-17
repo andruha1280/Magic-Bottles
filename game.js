@@ -588,7 +588,7 @@ function shadeColor(color, percent) {
 }
 
 // ---------- 16. КЛИКИ ----------
-canvas.addEventListener('click', (e) => {
+canvas.addEventListener('pointerdown', (e) => {
   if (animation || gamePaused) return;
 
   const rect = canvas.getBoundingClientRect();
